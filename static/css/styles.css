@@ -1,0 +1,75 @@
+/* static/css/styles.css */
+#settingsModal .modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Ensures full height of the viewport */
+}
+
+/* Highlight list items on hover */
+#config-list .list-group-item {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#config-list .list-group-item:hover {
+    background-color: #f8f9fa; /* Light gray background */
+}
+
+/* Navbar styles */
+.navbar-light {
+    background-color: #f8f9fa; /* Light grey background for the navbar */
+    border-bottom: 1px solid #e0e0e0; /* Subtle border for separation */
+}
+
+/* Buttons for configurations */
+.navbar-nav .nav-link {
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px; /* Comfortable spacing */
+    color: #007bff; /* Primary blue for text */
+    border: 1px solid #007bff; /* Blue border for distinction */
+    transition: all 0.3s ease; /* Smooth hover effects */
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #007bff; /* Primary blue on hover */
+    color: #fff; /* White text on hover */
+}
+
+/* Active button styling */
+.navbar-nav .nav-link.active {
+    background-color: #0056b3; /* Darker blue for active */
+    color: #fff; /* White text */
+}
+
+/* Add New Configuration button */
+.btn-success {
+    background-color: #28a745; /* Green button for adding configuration */
+    border-color: #28a745;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Darker green on hover */
+    border-color: #1e7e34;
+}
+
+.navbar-toggler {
+    margin-right: 10px; /* Adds spacing to the toggle button */
+    margin-bottom: 10px;
+}
+
+.navbar-nav .btn-success {
+    background-color: #28a745; /* Green color */
+    border-color: #28a745;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar-nav .btn-success:hover {
+    background-color: #218838; /* Darker green on hover */
+}

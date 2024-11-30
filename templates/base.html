@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Kotao na pelet{% endblock %}</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    </head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">Kotao</a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+                style="margin-right: 10px;" <!-- Added spacing -->
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- Dashboard Link -->
+                    <li class="nav-item">
+                        <a class="nav-link active btn btn-primary fw-bold mb-3 text-center text-white" href="/" style="width: 100%;">Pregled</a>
+                    </li>
+                    <!-- Configurations -->
+                    {% for config in configurations %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-primary fw-bold mb-2 text-center" href="/config/{{ config.name }}" style="width: 100%;">
+                            {{ config.name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                    <!-- Add New Configuration -->
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-success fw-bold text-center text-white shadow" onclick="addNewConfig()" style="width: 100%;">Dodaj novu konfiguraciju</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    
+    
+    
+    
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function addNewConfig() {
+            try {
+                const response = await fetch('/api/configurations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: '', days: [] })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    window.location.href = `/config/${data.name}`; // Redirect to the new configuration page
+                } else {
+                    console.error('Failed to add configuration');
+                }
+            } catch (error) {
+                console.error('Error adding configuration:', error);
+            }
+        }
+    </script>
+</body>
+</html>

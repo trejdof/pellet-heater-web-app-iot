@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Pregled</h1>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Trenutna temperatura</div>
+            <div class="card-body">
+                <h5 class="card-title" id="temperature">Loading...</h5>
+                <p id="temperature-timestamp" style="font-size: 0.85rem;">Loading timestamp...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">Status kotla</div>
+            <div class="card-body">
+                <h5 class="card-title" id="relay-status">Loading...</h5>
+                <p id="relay-status-timestamp" style="font-size: 0.85rem;">Loading timestamp...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-secondary mb-3">
+            <div class="card-header">Izabrana konfiguracija
+                <span style="float: right; cursor: pointer;" onclick="openSettings()">
+                    ⚙️
+                </span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="#" id="selected-config" style="color: white; text-decoration: underline;">Loading...</a>
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="settingsModal" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Izaberite konfiguraciju</h5>
+                <button type="button" class="btn-close" aria-label="Close" onclick="closeSettings()"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="config-list" class="list-group">
+                    <!-- Configurations will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    async function updateStoveStatus() {
+        try {
+            const response = await fetch('/api/stove-status');
+            const data = await response.json();
+
+            // Determine the status text based on the value
+            const statusText = data.status === 1 ? "On" : "Off";
+
+            // Format the timestamp
+            const isoDate = new Date(data.timestamp);
+            const formattedDate = isoDate.toLocaleDateString('sr-RS', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            const formattedTime = isoDate.toLocaleTimeString('sr-RS', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+
+            // Update the stove status card
+            document.getElementById('relay-status').innerText = `${statusText}`;
+            document.getElementById('relay-status-timestamp').innerText = `Vreme: ${formattedDate} ${formattedTime}`;
+        } catch (error) {
+            console.error("Error fetching stove status:", error);
+        }
+    }
+    // Fetch and update the last temperature reading
+    async function updateTemperature() {
+        try {
+            const response = await fetch('/api/last-temperature');
+            const data = await response.json();
+
+            // Format the timestamp
+            const isoDate = new Date(data.timestamp); // Parse the ISO date
+            const formattedDate = isoDate.toLocaleDateString('sr-RS', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            const formattedTime = isoDate.toLocaleTimeString('sr-RS', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false // Use 24-hour format
+            });
+
+            // Display the formatted data
+            document.getElementById('temperature').innerText = data.temperature + "°C";
+            document.getElementById('temperature-timestamp').innerText = `Vreme: ${formattedDate} ${formattedTime}`;
+        } catch (error) {
+            console.error("Error fetching temperature data:", error);
+        }
+    }
+
+
+    // Fetch and update the currently selected configuration
+    async function updateDashboard() {
+        try {
+            // Fetch current configuration name
+            const response = await fetch('/api/current-config');
+            const data = await response.json();
+
+            // Update the selected configuration link
+            const selectedConfigElement = document.getElementById('selected-config');
+            selectedConfigElement.innerText = data.name;
+            selectedConfigElement.href = `/config/${data.name}`;
+        } catch (error) {
+            console.error("Error fetching current configuration:", error);
+        }
+    }
+
+    // Open the settings modal to display the list of configurations
+    async function openSettings() {
+        try {
+            const response = await fetch('/api/configurations');
+            const configs = await response.json();
+
+            const configList = document.getElementById('config-list');
+            configList.innerHTML = ''; // Clear existing configurations
+            configs.forEach(config => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                listItem.innerHTML = `
+                    <a href="#" class="text-decoration-none" onclick="selectConfig('${config.name}')">${config.name}</a>
+                `;
+                configList.appendChild(listItem);
+            });
+
+            // Show the settings modal
+            document.getElementById('settingsModal').style.display = 'block';
+        } catch (error) {
+            console.error("Error loading configurations:", error);
+        }
+    }
+
+    // Close the settings modal
+    function closeSettings() {
+        document.getElementById('settingsModal').style.display = 'none';
+    }
+
+    // Select a configuration and set it as the current configuration
+    async function selectConfig(configName) {
+        try {
+            // Send the selected configuration to the backend
+            const response = await fetch('/api/current-config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: configName })
+            });
+
+            if (response.ok) {
+                closeSettings(); // Close the modal
+                updateDashboard(); // Refresh the selected configuration display
+            } else {
+                console.error("Failed to set current configuration");
+            }
+        } catch (error) {
+            console.error("Error setting current configuration:", error);
+        }
+    }
+
+    // Function to refresh all dashboard data periodically
+    async function refreshDashboard() {
+        updateTemperature(); // Refresh the temperature data
+        updateStoveStatus();
+        updateDashboard();   // Refresh the selected configuration
+    }
+
+    // Refresh dashboard every 5 seconds
+    setInterval(refreshDashboard, 5000);
+
+    // Initial call to populate data on page load
+    refreshDashboard();
+</script>
+
+{% endblock %}
