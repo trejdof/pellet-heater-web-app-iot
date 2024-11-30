@@ -1,6 +1,6 @@
 # Pellet heater - Web Application
 
-A Flask-based web application to manage configurations for controlling a pellet stove (`kotao na pelet`). Users can create and edit weekly schedules, view real-time temperature data, and monitor stove status.
+A Flask-based web application to manage configurations for controlling a pellet stove. Users can create and edit weekly schedules, view real-time temperature data, and monitor stove status.
 
 ---
 
