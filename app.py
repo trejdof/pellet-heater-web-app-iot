@@ -1,6 +1,9 @@
 from flask import Flask, render_template, jsonify, request
 import json
 import os
+import paho.mqtt.client as mqtt
+import random
+from datetime import datetime
 
 # Environment variables
 DATA_FOLDER = os.getenv("DATA_FOLDER", "data")  # Default to "data" if not set
@@ -9,8 +12,71 @@ CURRENT_CONFIG_PATH = os.getenv("CURRENT_CONFIG_PATH", os.path.join(DATA_FOLDER,
 LAST_TEMPERATURE_PATH = os.getenv("LAST_TEMPERATURE_PATH", os.path.join(DATA_FOLDER, "last_temperature_reading.json"))
 STOVE_STATUS_PATH = os.getenv("STOVE_STATUS_PATH", os.path.join(DATA_FOLDER, "stove_status.json"))
 
+# MQTT Configuration
+MQTT_BROKER = "localhost"  # Set to Raspberry Pi's IP for external connections
+MQTT_PORT = 1883
+MQTT_TOPIC = "test/topic"
+MQTT_USER = None           # Set your MQTT username (if using authentication)
+MQTT_PASSWORD = None       # Set your MQTT password (if using authentication)
 
+# Initialize Flask app
 app = Flask(__name__)
+
+# Initialize MQTT client
+mqtt_client = mqtt.Client()
+
+if MQTT_USER and MQTT_PASSWORD:
+    mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
+
+# Callbacks for MQTT
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("Connected successfully to MQTT broker")
+        client.subscribe(MQTT_TOPIC)  # Subscribe to topic after successful connection
+        print(f"Subscribed to topic: {MQTT_TOPIC}")
+    else:
+        print(f"Failed to connect, return code {rc}")
+
+def on_subscribe(client, userdata, mid, granted_qos):
+    print(f"Subscribed successfully, granted QoS: {granted_qos}")
+
+def on_log(client, userdata, level, buf):
+    print(f"MQTT log: {buf}")
+
+def on_message(client, userdata, msg):
+    # Decode the received message
+    try:
+        payload = json.loads(msg.payload.decode())  # Assuming the message is JSON
+        topic = msg.topic
+
+        # Check if it's the topic you're interested in
+        if topic == MQTT_TOPIC:
+            # Randomize the temperature for testing purposes
+            temperature = round(random.uniform(18.0, 25.0), 1)
+
+            # Use the current time as the timestamp
+            timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+
+            # Update the JSON file with the randomized data
+            save_json(LAST_TEMPERATURE_PATH, {"temperature": temperature, "timestamp": timestamp})
+            print(f"Updated {LAST_TEMPERATURE_PATH} with randomized temperature: {temperature} and timestamp: {timestamp}")
+
+        else:
+            print(f"Received message on unhandled topic {topic}: {payload}")
+
+    except json.JSONDecodeError as e:
+        print(f"Failed to decode message payload: {msg.payload.decode()} - Error: {e}")
+
+# Assign MQTT callbacks
+mqtt_client.on_connect = on_connect
+mqtt_client.on_message = on_message
+mqtt_client.on_subscribe = on_subscribe
+mqtt_client.on_log = on_log
+
+# Connect to MQTT broker and start loop
+mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
+mqtt_client.enable_logger()
+mqtt_client.loop_start()
 
 # Helper functions
 def load_json(file_path, default=None):
@@ -85,7 +151,19 @@ def current_config():
 
 @app.route('/api/last-temperature', methods=['GET'])
 def last_temperature():
+    # Load the last temperature reading from the JSON file
     data = load_json(LAST_TEMPERATURE_PATH, {"temperature": "N/A", "timestamp": "N/A"})
+    
+    # Prepare the message to publish
+    message = {
+        "temperature": data.get("temperature", "N/A"),
+        "timestamp": data.get("timestamp", "N/A")
+    }
+
+    # Publish the message to the MQTT topic
+    mqtt_client.publish(MQTT_TOPIC, json.dumps(message))
+
+    # Return the JSON data as the API response
     return jsonify(data)
 
 @app.route('/api/stove-status', methods=['GET'])
@@ -103,6 +181,14 @@ def get_configuration(name):
 
     return jsonify(config)
 
+@app.route('/publish', methods=['POST'])
+def publish_message():
+    """Route to publish a message to MQTT"""
+    data = request.json
+    topic = data.get("topic", MQTT_TOPIC)
+    message = data.get("message", "Hello from Flask!")
+    mqtt_client.publish(topic, message)
+    return jsonify({"status": "Message published!"})
 
 @app.context_processor
 def inject_configurations():
