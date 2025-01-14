@@ -1,75 +1,182 @@
-/* static/css/styles.css */
-#settingsModal .modal-dialog {
+/* General Body Styling */
+body {
+    background-color: #32383f; /* Dark background */
+    color: white; /* White text for contrast */
+}
+
+/* Heading Styling */
+h1 {
+    color: white; /* Visible on dark background */
+    text-align: center; /* Center-align the heading */
+    margin-bottom: 20px; /* Add spacing below the heading */
+}
+
+/* Navbar Styling */
+.navbar .nav-link {
+    color: white !important; /* Ensure consistent white color */
+    font-weight: bold; /* Bold text for nav links */
+    transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+.navbar .nav-link:hover,
+.navbar .dropdown-toggle:hover {
+    color: #adb5bd !important; /* Light gray on hover */
+}
+
+.navbar .dropdown-menu {
+    background-color: #343a40; /* Dark gray background for dropdown */
+    border: none; /* Remove border */
+}
+
+.navbar .dropdown-item {
+    color: #f8f9fa !important; /* Ensure dropdown items are white */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar .dropdown-item:hover {
+    background-color: #495057; /* Slightly lighter gray on hover */
+    color: #f8f9fa !important; /* Ensure text remains white */
+}
+
+.navbar .dropdown-divider {
+    background-color: #6c757d; /* Divider color */
+}
+
+/* Card Styling */
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for contrast */
+    flex: 1; /* Allow cards to grow/shrink equally */
+    min-height: 170px; /* Consistent height */
     display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh; /* Ensures full height of the viewport */
+    flex-direction: column; /* Stack card content vertically */
+    justify-content: space-between; /* Distribute content evenly */
+    border-radius: 10px; /* Add border radius for cards */
 }
 
-/* Highlight list items on hover */
-#config-list .list-group-item {
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.card .card-header {
+    font-weight: bold;
 }
 
-#config-list .list-group-item:hover {
-    background-color: #f8f9fa; /* Light gray background */
+.card .card-title {
+    font-size: 2.5rem; /* Large font size for titles */
+    font-weight: bold;
+    margin: 0; /* Remove default margin */
 }
 
-/* Navbar styles */
-.navbar-light {
-    background-color: #f8f9fa; /* Light grey background for the navbar */
-    border-bottom: 1px solid #e0e0e0; /* Subtle border for separation */
+.card p {
+    font-size: 1rem; /* Subtitles font size */
+    margin-top: 10px; /* Add spacing above */
 }
 
-/* Buttons for configurations */
-.navbar-nav .nav-link {
-    border-radius: 8px; /* Rounded corners */
-    padding: 10px; /* Comfortable spacing */
-    color: #007bff; /* Primary blue for text */
-    border: 1px solid #007bff; /* Blue border for distinction */
-    transition: all 0.3s ease; /* Smooth hover effects */
+.card.text-white.bg-primary {
+    background-color: #007bff; /* Blue for primary card */
 }
 
-.navbar-nav .nav-link:hover {
-    background-color: #007bff; /* Primary blue on hover */
-    color: #fff; /* White text on hover */
+.card.text-white.bg-success {
+    background-color: #28a745; /* Green for success card */
 }
 
-/* Active button styling */
-.navbar-nav .nav-link.active {
-    background-color: #0056b3; /* Darker blue for active */
-    color: #fff; /* White text */
+.card.text-white.bg-secondary {
+    background-color: #6c757d; /* Gray for secondary card */
 }
 
-/* Add New Configuration button */
-.btn-success {
-    background-color: #28a745; /* Green button for adding configuration */
-    border-color: #28a745;
-    padding: 10px 15px;
-    font-size: 1rem;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+/* Row Styling for Cards */
+.row {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    gap: 15px; /* Add spacing between cards */
+    justify-content: space-between; /* Distribute cards evenly */
 }
 
-.btn-success:hover {
-    background-color: #218838; /* Darker green on hover */
-    border-color: #1e7e34;
+@media (min-width: 992px) {
+    .row {
+        flex-wrap: nowrap; /* Prevent wrapping on larger screens */
+    }
 }
 
-.navbar-toggler {
-    margin-right: 10px; /* Adds spacing to the toggle button */
-    margin-bottom: 10px;
+/* Modal Styling */
+.modal-content {
+    background-color: #1f1e1e; /* Lighter gray for modal background */
+    color: #f8f9fa; /* Off-white text for better contrast */
+    border: none;
+    border-radius: 15px; /* Fully rounded edges */
+    overflow: hidden; /* Ensure content fits the rounded corners */
 }
 
-.navbar-nav .btn-success {
-    background-color: #28a745; /* Green color */
-    border-color: #28a745;
-    padding: 10px;
-    border-radius: 8px;
-    transition: all 0.3s ease-in-out;
+/* Modal Header */
+.modal-header {
+    border-bottom: 1px solid #1f1e1e; /* Subtle border */
+    color: #f8f9fa; /* Off-white text */
 }
 
-.navbar-nav .btn-success:hover {
-    background-color: #218838; /* Darker green on hover */
+/* Modal Body */
+.modal-body {
+    background-color: #1f1e1e; /* Match modal-content */
+    color: #f8f9fa; /* Off-white text */
+    max-height: 500px; /* Scrollable height */
+    overflow-y: auto; /* Add scrolling for overflow */
+    padding: 10px; /* Add padding */
+    scrollbar-width: thin; /* Thinner scrollbar for Firefox */
+}
+
+/* List Group Items in Modal */
+/* Hover effect for modal list items */
+.modal .list-group-item {
+    background-color: #1f1e1e; /* Default background color */
+    color: #f8f9fa; /* Default text color */
+    cursor: pointer; /* Pointer cursor for clarity */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modal .list-group-item:hover {
+    background-color: #495057; /* Darker gray on hover */
+    color: white; /* Ensure text is visible on hover */
+}
+
+
+.modal .list-group-item a {
+    color: #ffffff !important; /* White text for links inside list group */
+}
+
+.modal .list-group-item a:hover {
+    color: #adb5bd !important; /* Light gray on hover */
+}
+
+/* Scrollbar Styling for Webkit Browsers */
+.modal-body::-webkit-scrollbar {
+    width: 8px; /* Scrollbar width */
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background-color: #4b5158; /* Dark gray scrollbar thumb */
+    border-radius: 10px; /* Rounded edges for the thumb */
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background-color: #5a6168; /* Slightly lighter gray on hover */
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background-color: #343a40; /* Track background matching modal */
+    border-radius: 10px; /* Optional: rounded scrollbar track */
+}
+
+/* Scrollbar Styling for Firefox */
+.modal-body {
+    scrollbar-color: #4b5158 #343a40; /* Thumb color, Track color */
+    scrollbar-width: thin; /* Thinner scrollbar */
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 1) !important; /* Darker overlay */
+    z-index: 1040; /* Backdrop layer */
+}
+
+.modal {
+    z-index: 1050; /* Modal layer (above backdrop) */
+}
+
+/* Close Button Styling */
+.btn-close {
+    filter: invert(90%); /* Lighter close button */
 }

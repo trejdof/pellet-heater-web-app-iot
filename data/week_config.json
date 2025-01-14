@@ -1,7 +1,162 @@
 [
     {
         "name": "Konfiguracija_1",
-        "days": []
+        "days": {
+            "Ponedeljak": [
+                {
+                    "temperature": 22,
+                    "start": "18:09",
+                    "end": "22:10"
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                }
+            ],
+            "Utorak": [
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                }
+            ],
+            "Sreda": [
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                }
+            ],
+            "\u010cetvrtak": [
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                }
+            ],
+            "Petak": [
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                }
+            ],
+            "Subota": [
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                }
+            ],
+            "Nedelja": [
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                },
+                {
+                    "temperature": null,
+                    "start": "",
+                    "end": ""
+                }
+            ]
+        }
     },
     {
         "name": "Konfiguracija_2",
@@ -510,6 +665,34 @@
     },
     {
         "name": "Konfiguracija_12",
+        "days": []
+    },
+    {
+        "name": "Konfiguracija_13",
+        "days": []
+    },
+    {
+        "name": "Konfiguracija_14",
+        "days": []
+    },
+    {
+        "name": "Konfiguracija_15",
+        "days": []
+    },
+    {
+        "name": "Konfiguracija_16",
+        "days": []
+    },
+    {
+        "name": "Konfiguracija_17",
+        "days": []
+    },
+    {
+        "name": "Konfiguracija_18",
+        "days": []
+    },
+    {
+        "name": "Konfiguracija_19",
         "days": []
     }
 ]
